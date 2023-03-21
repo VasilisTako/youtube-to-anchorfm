@@ -73,7 +73,7 @@ async function selectMonthInDatePicker(page, navigationPromise, month) {
 async function selectDayInDatePicker(page, navigationPromise, day) {
   const dayWithRemovedZeroPad = parseInt(day, 10);
   const tdDay = await page.$(
-    `tbody > tr > td[data-value="${dayWithRemovedZeroPad}"][class*="rdtDay"]:not([class*="rdtOld"]:not([class*="rtdNew"])`
+    `tbody > tr > td[data-value="${dayWithRemovedZeroPad}"][class*="rdtDay"]:not([class*="rdtOld"]):not([class*="rtdNew"])`
   );
   await tdDay.click();
   await navigationPromise;
@@ -137,7 +137,8 @@ async function postEpisode(youtubeVideoInfo) {
     await page.type('div[role="textbox"]', finalDescription);
 
     if (env.SET_PUBLISH_DATE) {
-      await setPublishDate(page, navigationPromise, youtubeVideoInfo.uploadDate);
+      // await setPublishDate(page, navigationPromise, youtubeVideoInfo.uploadDate);
+      await setPublishDate(page, navigationPromise, { year: '2023', month: 'Mar', day: '18' });
     }
 
     console.log('-- Selecting content type');
