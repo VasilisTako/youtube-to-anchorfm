@@ -9,7 +9,12 @@ RUN mkdir -p /etc/apt/keyrings
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 RUN apt-get update
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 RUN apt-get install -y nodejs
+RUN echo "Checking node version..."
+RUN node --version
+RUN echo "Checking npm version..."
+RUN npm --version
 RUN apt-get install -y python3
 RUN apt-get install --reinstall libgtk2.0-0 -y
 RUN apt-get install -y libgbm-dev
