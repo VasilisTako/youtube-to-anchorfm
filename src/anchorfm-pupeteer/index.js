@@ -101,26 +101,43 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function openNewPage(url) {
-    const newPage = await browser.newPage();
-    await newPage.goto(url);
-    await newPage.setViewport({ width: 1600, height: 789 });
-    return newPage;
+    try {
+      console.log(`Opening new page: ${url}`);
+      const newPage = await browser.newPage();
+      await newPage.goto(url);
+      await newPage.setViewport({ width: 1600, height: 789 });
+      console.log(`Opened new page: ${url}`);
+      return newPage;
+    } catch (err) {
+      console.error(`Error in openNewPage: ${err}`);
+      throw err;
+    }
   }
 
   async function acceptDefaultCookies() {
     try {
+      console.log('Attempting to accept default cookies');
       await clickSelector(page, '#onetrust-pc-btn-handler', env.COOKIE_TIMEOUT);
       await clickSelector(page, '.save-preference-btn-handler.onetrust-close-btn-handler', env.COOKIE_TIMEOUT);
+      console.log('Accepted default cookies');
     } catch (err) {
-      console.log('Cookie already accepted or not UE based user');
+      console.log('Cookie already accepted or not UE based user:', err);
+      throw err;
     }
   }
 
   async function setLanguageToEnglish() {
-    await clickSelector(page, 'button[aria-label="Change language"]');
-    await clickSelector(page, '[data-testid="language-option-en"]');
+    try {
+      console.log('Setting language to English');
+      await clickSelector(page, 'button[aria-label="Change language"]');
+      await clickSelector(page, '[data-testid="language-option-en"]');
+      console.log('Language set to English');
+    } catch (err) {
+      console.error(`Error in setLanguageToEnglish: ${err}`);
+      throw err;
+    }
   }
-
+  
   async function login() {
     console.log('-- Accessing Spotify for Podcasters login page');
     await clickXpath(page, '//button[contains(text(), "Continue")]');
