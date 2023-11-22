@@ -105,8 +105,12 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function setLanguageToEnglish() {
-    await clickSelector(page, 'button[aria-label="Change language"]');
-    await clickSelector(page, 'div[aria-label="Language selection modal"] a[data-testid="language-option-en"]');
+    try {
+      await clickSelector(page, 'button[aria-label="Change language"]');
+      await clickSelector(page, 'div[aria-label="Language selection modal"] a[data-testid="language-option-en"]');
+    } catch (error) {
+      console.log("error on language selection during the action")
+    }
   }
 
   async function login() {
