@@ -51,6 +51,9 @@ async function postEpisode(youtubeVideoInfo) {
 
     page = await openNewPage('https://podcasters.spotify.com/pod/dashboard/episode/wizard');
 
+    console.log('Accepting default cookies')
+    await acceptDefaultCookies()
+
     console.log('Setting language to English');
     await setLanguageToEnglish();
 
@@ -104,12 +107,33 @@ async function postEpisode(youtubeVideoInfo) {
     return newPage;
   }
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function acceptDefaultCookies() {
+    try {
+      await clickSelector(page, '#onetrust-pc-btn-handler', env.COOKIE_TIMEOUT);
+      await clickSelector(page, '.save-preference-btn-handler.onetrust-close-btn-handler', env.COOKIE_TIMEOUT);
+    } catch (err) {
+      console.log('-- Cookie already accepted or not UE based user');
+    }
+  }
+
   async function setLanguageToEnglish() {
     await clickSelector(page, 'button[aria-label="Change language"]');
-    await clickSelector(page, 'div[aria-label="Language selection modal"] a[data-testid="language-option-en"]');
+    await clickSelector(page, '[data-testid="language-option-en"]');
   }
 
   async function login() {
+    if (env.ANCHOR_LOGIN) {
+      await anchorLogin();
+    } else {
+      await spotifyLogin();
+    }
+  }
+
+  async function anchorLogin() {
     console.log('-- Accessing Spotify for Podcasters login page');
     await clickXpath(page, '//button[contains(text(), "Continue")]');
 
@@ -125,6 +149,26 @@ async function postEpisode(youtubeVideoInfo) {
     await clickSelector(page, 'button[type=submit]');
     await page.waitForNavigation();
     console.log('-- Logged in');
+  }
+
+  async function spotifyLogin() {
+    
+    console.log('-- Accessing new Spotify login page for podcasts');
+    await clickXpath(page, '//span[contains(text(), "Continue with Spotify")]/parent::button');
+    console.log('-- Logging in');
+    
+    await page.waitForSelector('#login-username');
+    console.log('-- Login form');
+    await sleepSeconds(1);
+    await page.type('#login-username', env.SPOTIFY_EMAIL);
+    await page.type('#login-password', env.SPOTIFY_PASSWORD);
+    await sleepSeconds(1);
+
+    console.log('-- Login button');
+    await clickSelector(page, 'button[id="login-button"]');
+    console.log('-- Logged in');
+    await clickSelector(page, 'button[data-testid="auth-accept"]');
+    console.log('-- In the app');
   }
 
   async function waitForNewEpisodeWizard() {
