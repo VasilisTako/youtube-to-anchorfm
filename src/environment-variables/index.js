@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const defaultValues = {
   EPISODE_PATH: '.',
   EPISODE_FILE: 'episode.json',
-  ANCHOR_LOGIN: true,
+  ANCHOR_LOGIN: false,
   ANCHOR_EMAIL: '',
   ANCHOR_PASSWORD: '',
   SPOTIFY_EMAIL: '',
