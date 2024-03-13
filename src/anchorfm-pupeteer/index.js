@@ -167,7 +167,7 @@ async function postEpisode(youtubeVideoInfo) {
     console.log('-- Login button');
     await clickSelector(page, 'button[id="login-button"]');
     console.log('-- Logged in');
-    const screenshotPathBeforeClick = 'before_auth_accept.png';
+    const screenshotPathBeforeClick = '/github/workspace/before_auth_accept.png';
     await page.screenshot({path: screenshotPathBeforeClick});
     console.log(`Screenshot taken and saved to ${screenshotPathBeforeClick}`);
     await clickSelector(page, 'button[data-testid="auth-accept"]');
