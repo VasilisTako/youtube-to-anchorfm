@@ -17,11 +17,11 @@ jobs:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
           SPOTIFY_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
-          SPOTIFY_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
+          SPOTIFY_PASSWORD: ${{ secrets.SPOTIFY_PASSWORD }}
           EPISODE_PATH: /github/workspace
       - name: Upload screenshots
         uses: actions/upload-artifact@v2
-        if: always()
+        if: failure()
         with:
           name: screenshots
           path: before_auth_accept.png
